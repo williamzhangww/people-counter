@@ -26,7 +26,6 @@ from .config import (
     SHOW_REGION_RECT,
     THICK_BIG,
     USE_FULL_FRAME,
-    VIDEO_PATH,
     WINDOW_NAME,
     MIN_TRACK_FRAMES_TO_COUNT,
     TRACK_MAX_AGE_FRAMES,
@@ -116,7 +115,9 @@ def _finalize_event_row(row_id: int, start_frame: int, end_frame: int, visible_f
 
 
 def run_pipeline(video_path: str | Path | None = None, show_live_window: bool | None = None, progress_callback: Optional[Callable[[int, str], None]] = None, output_name: str | None = None):
-    video_path = Path(video_path) if video_path else Path(VIDEO_PATH)
+    if video_path is None:
+        raise RuntimeError("No input video path was provided.")
+    video_path = Path(video_path)
     if not allowed_file(video_path.name):
         raise RuntimeError(f"Unsupported file type: {video_path.name}")
 
